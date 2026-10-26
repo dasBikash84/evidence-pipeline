@@ -1,0 +1,58 @@
+
+=== run: honest model ===
+  [ok ] collect         0.000s     0 tok  
+  [ok ] normalise       0.000s     0 tok  
+  [ok ] freshness       0.003s     0 tok  
+  [ok ] select          0.000s     0 tok  
+  [ok ] draft           0.000s   800 tok  
+  [ok ] verify          0.000s     0 tok  
+  [ok ] queue           0.000s     0 tok  
+  -> queued for human review: 'commits this week up 52 percent, at 47 commits. Also this week: 1200000 tokens, 62 km.'
+  spans=7 tokens=800
+
+=== run: model invents a figure ===
+  [ok ] collect         0.000s     0 tok  
+  [ok ] normalise       0.000s     0 tok  
+  [ok ] freshness       0.000s     0 tok  
+  [ok ] select          0.000s     0 tok  
+  [ok ] draft           0.000s   800 tok  
+  [FAIL] verify          0.000s     0 tok  gate rejected: draft asserts figures with no source record: 35
+  -> BLOCKED before publish: draft asserts figures with no source record: 35
+  spans=6 tokens=800
+
+=== run: training source 21 days stale ===
+  [ok ] collect         0.000s     0 tok  
+  [ok ] normalise       0.000s     0 tok  
+       ALERT  stale source: intervals_icu: km_this_week last observed 2026-10-05, 21 days ago, SLO is 7 days
+  [ok ] freshness       0.000s     0 tok  
+  [ok ] select          0.000s     0 tok  
+  [ok ] draft           0.000s   800 tok  
+  [ok ] verify          0.000s     0 tok  
+  [ok ] queue           0.000s     0 tok  
+  -> queued for human review: 'commits this week up 52 percent, at 47 commits. Also this week: 1200000 tokens.'
+  spans=7 tokens=800
+
+=== run: backend accepts, process dies before state is written ===
+  [ok ] collect         0.000s     0 tok  
+  [ok ] normalise       0.000s     0 tok  
+  [ok ] freshness       0.000s     0 tok  
+  [ok ] select          0.000s     0 tok  
+  [ok ] draft           0.000s   800 tok  
+  [ok ] verify          0.000s     0 tok  
+  [FAIL] queue           0.000s     0 tok  attempt 1: accepted the write, then the connection dropped
+       ALERT  step failed: queue: step 'queue' failed after 1 attempt
+  -> run died: RuntimeError: step 'queue' failed after 1 attempt
+  spans=7 tokens=800
+
+=== run: same run resumed after the death ===
+  [ok ] collect         0.000s     0 tok  skipped, already done
+  [ok ] normalise       0.000s     0 tok  skipped, already done
+  [ok ] freshness       0.000s     0 tok  skipped, already done
+  [ok ] select          0.000s     0 tok  skipped, already done
+  [ok ] draft           0.000s     0 tok  skipped, already done
+  [ok ] verify          0.000s     0 tok  skipped, already done
+       DEDUPE accepted key 272bb70e:queue already, not queueing twice
+  [ok ] queue           0.000s     0 tok  
+  -> queued for human review: 'commits this week up 52 percent, at 47 commits. Also this week: 1200000 tokens, 62 km.'
+  spans=7 tokens=0
+  queue depth after both runs: 1
